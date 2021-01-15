@@ -326,6 +326,7 @@ export default class CncReliefToolPathGenerator extends EventEmitter {
 
         return {
             data: paths,
+            uploadName: this.modelInfo.uploadName,
             positionX: 0,
             positionY: this.transformation.positionY,
             rotationB: this.isRotate ? this.toolPath.toB(this.transformation.positionX) : 0,
@@ -540,7 +541,7 @@ export default class CncReliefToolPathGenerator extends EventEmitter {
     };
 
     async generateViewPathObj() {
-        const data = await this.this._processImage();
+        const data = await this._processImage();
         return this.isRotate ? this.parseRotateImageToViewPathObj(data)
             : this.parseImageToViewPathObj(data);
     }

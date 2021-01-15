@@ -1091,6 +1091,7 @@ export const actions = {
         if (modelInfos.length === 0) {
             return;
         }
+        console.log(modelInfos);
         controller.commitViewPathTask({
             taskId: uuid.v4(),
             headType: headType,

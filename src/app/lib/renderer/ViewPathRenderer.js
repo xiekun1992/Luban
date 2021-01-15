@@ -1,10 +1,14 @@
 import * as THREE from 'three';
-import { PROCESS_MODE_VECTOR } from '../../constants';
+import { DATA_PREFIX, PROCESS_MODE_VECTOR } from '../../constants';
+import LoadModelWorker from '../../workers/LoadModel.worker';
+import ThreeUtils from '../../components/three-extensions/ThreeUtils';
 
 export class ViewPathRenderer {
+    worker = null;
+
     async render(viewPaths, size) {
         await this._generateTexture();
-        const objs = this._generateViewPathObjs(viewPaths);
+        const objs = await this._generateViewPathObjs(viewPaths);
         const background = this._generateBackground(viewPaths, size);
 
         const g = new THREE.Group();
@@ -101,26 +105,86 @@ export class ViewPathRenderer {
         return mesh;
     }
 
-    _generateViewPathObjs(viewPaths) {
+    async _generateViewPathObjs(viewPaths) {
         const group = new THREE.Group();
         for (const viewPath of viewPaths.data) {
-            // eslint-disable-next-line no-unused-vars
-            const { mode, boundingBox } = viewPath;
-            const mesh = mode === PROCESS_MODE_VECTOR && !viewPaths.isRotate
-                ? this._generateSvgViewPathObj(viewPath)
-                : this._generateViewPathObj(viewPath);
+            if (viewPath.uploadName) {
+                await this._generateBySTL(viewPath, group);
+            } else {
+                // eslint-disable-next-line no-unused-vars
+                const { mode, boundingBox } = viewPath;
+                const mesh = mode === PROCESS_MODE_VECTOR && !viewPaths.isRotate
+                    ? this._generateSvgViewPathObj(viewPath)
+                    : this._generateViewPathObj(viewPath);
 
-            if (!viewPaths.isRotate) {
-                const boxPoints = this._generateByBox(boundingBox.min, boundingBox.max);
-                const boxMesh = this._generateMesh(new THREE.Shape(boxPoints),
-                    viewPaths.targetDepth - boundingBox.length.z, '#cccccc');
-                boxMesh.position.z = -viewPaths.targetDepth;
-                group.add(boxMesh);
+                if (!viewPaths.isRotate) {
+                    const boxPoints = this._generateByBox(boundingBox.min, boundingBox.max);
+                    const boxMesh = this._generateMesh(new THREE.Shape(boxPoints),
+                        viewPaths.targetDepth - boundingBox.length.z, '#cccccc');
+                    boxMesh.position.z = -viewPaths.targetDepth;
+                    group.add(boxMesh);
+                }
+                group.add(mesh);
             }
-            group.add(mesh);
         }
 
         return group;
+    }
+
+    _generateBySTL(viewPath, group) {
+        return new Promise(resolve => {
+            const worker = new LoadModelWorker();
+            const uploadPath = `${DATA_PREFIX}/${viewPath.uploadName}`;
+            worker.postMessage({ uploadPath });
+            worker.onmessage = async (e) => {
+                const data = e.data;
+
+                const { type } = data;
+
+                switch (type) {
+                    case 'LOAD_MODEL_POSITIONS': {
+                        const { positions } = data;
+
+                        const bufferGeometry = new THREE.BufferGeometry();
+                        const modelPositionAttribute = new THREE.BufferAttribute(positions, 3);
+                        const material = this._generateMaterial();
+                        // const material = new THREE.MeshPhongMaterial({ color: 0xa0a0a0, specular: 0xb0b0b0, shininess: 0 });
+
+                        bufferGeometry.addAttribute('position', modelPositionAttribute);
+                        bufferGeometry.computeVertexNormals();
+                        // Create model
+                        // modelGroup.generateModel(modelInfo);
+
+                        const mesh = new THREE.Mesh(bufferGeometry, material);
+
+                        mesh.rotation.x = Math.PI / 2;
+
+                        const box = ThreeUtils.computeBoundingBox(mesh);
+                        const scale = (viewPath.boundingBox.length.y) / (box.max.y - box.min.y);
+
+                        mesh.scale.x = scale;
+                        mesh.scale.y = scale;
+                        mesh.scale.z = scale;
+
+                        if (viewPath.positionX) {
+                            mesh.position.x = viewPath.positionX;
+                        }
+                        if (viewPath.positionY) {
+                            mesh.position.y = viewPath.positionY;
+                        }
+                        if (viewPath.rotationB) {
+                            mesh.rotation.z = viewPath.rotationB / 180 * Math.PI;
+                        }
+
+                        group.add(mesh);
+                        resolve(group);
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            };
+        });
     }
 
     _generateBackground(viewPaths, size) {
