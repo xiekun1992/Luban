@@ -273,7 +273,7 @@ export const actions = {
                 }
             });
             editMenu.submenu.forEach(item => {
-                item.enabled = false;
+                item.enabled = true;
             });
             helpMenu.submenu.forEach(item => {
                 switch (item.id) {

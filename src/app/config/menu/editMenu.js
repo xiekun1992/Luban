@@ -9,56 +9,59 @@ export default {
         {
             id: 'undo',
             label: 'Undo',
+            role: 'undo',
             accelerator: 'CommandOrControl+Z',
-            enabled: true,
-            click(menuItem, browserWindow) {
-                if (isElectron()) {
-                    browserWindow.webContents.send('shortcut', 'mod+z', 'undo');
-                } else {
-                    UniApi.Event.emit('appbar-menu:shortcut', 'mod+z', 'undo');
-                }
-            }
+            enabled: true
+            // click(menuItem, browserWindow) {
+            //     if (isElectron()) {
+            //         browserWindow.webContents.send('shortcut', 'mod+z', 'undo');
+            //     } else {
+            //         UniApi.Event.emit('appbar-menu:shortcut', 'mod+z', 'undo');
+            //     }
+            // }
         },
         {
             id: 'redo',
             label: 'Redo',
+            role: 'redo',
             accelerator: 'CommandOrControl+Shift+Z',
-            enabled: true,
-            click(menuItem, browserWindow) {
-                if (isElectron()) {
-                    browserWindow.webContents.send('shortcut', 'mod+shift+z', 'redo');
-                } else {
-                    UniApi.Event.emit('appbar-menu:shortcut', 'mod+shift+z', 'redo');
-                }
-            }
+            enabled: true
+            // click(menuItem, browserWindow) {
+            //     if (isElectron()) {
+            //         browserWindow.webContents.send('shortcut', 'mod+shift+z', 'redo');
+            //     } else {
+            //         UniApi.Event.emit('appbar-menu:shortcut', 'mod+shift+z', 'redo');
+            //     }
+            // }
         },
         { id: 'line-1', type: 'separator' },
         {
             id: 'cut',
             label: 'Cut',
+            role: 'cut',
             accelerator: 'CommandOrControl+X',
-            enabled: true,
-            click(menuItem, browserWindow) {
-                if (isElectron()) {
-                    browserWindow.webContents.send('shortcut', 'mod+x');
-                } else {
-                    UniApi.Event.emit('appbar-menu:shortcut', 'mod+x');
-                }
-            }
+            enabled: true
+            // click(menuItem, browserWindow) {
+            //     if (isElectron()) {
+            //         browserWindow.webContents.send('shortcut', 'mod+x');
+            //     } else {
+            //         UniApi.Event.emit('appbar-menu:shortcut', 'mod+x');
+            //     }
+            // }
         },
         {
             id: 'copy',
             label: 'Copy',
+            role: 'copy',
             accelerator: 'CommandOrControl+C',
-            selector: 'copy:',
-            enabled: true,
-            click(menuItem, browserWindow) {
-                if (isElectron()) {
-                    browserWindow.webContents.send('shortcut', 'mod+c');
-                } else {
-                    UniApi.Event.emit('appbar-menu:shortcut', 'mod+c');
-                }
-            }
+            enabled: true
+            // click(menuItem, browserWindow) {
+            //     if (isElectron()) {
+            //         browserWindow.webContents.send('shortcut', 'mod+c');
+            //     } else {
+            //         UniApi.Event.emit('appbar-menu:shortcut', 'mod+c');
+            //     }
+            // }
         },
         {
             id: 'duplicate',
@@ -76,30 +79,31 @@ export default {
         {
             id: 'paste',
             label: 'Paste',
+            role: 'paste',
             accelerator: 'CommandOrControl+V',
-            selector: 'paste:',
-            enabled: true,
-            click(menuItem, browserWindow) {
-                if (isElectron()) {
-                    browserWindow.webContents.send('shortcut', 'mod+v');
-                } else {
-                    UniApi.Event.emit('appbar-menu:shortcut', 'mod+v');
-                }
-            }
+            enabled: true
+            // click(menuItem, browserWindow) {
+            //     if (isElectron()) {
+            //         browserWindow.webContents.send('shortcut', 'mod+v');
+            //     } else {
+            //         UniApi.Event.emit('appbar-menu:shortcut', 'mod+v');
+            //     }
+            // }
         },
         { id: 'line-2', type: 'separator' },
         {
             id: 'select-all',
             label: 'Select All',
+            role: 'selectAll',
             accelerator: 'CommandOrControl+A',
-            enabled: true,
-            click(menuItem, browserWindow) {
-                if (isElectron()) {
-                    browserWindow.webContents.send('shortcut', 'mod+a');
-                } else {
-                    UniApi.Event.emit('appbar-menu:shortcut', 'mod+a');
-                }
-            }
+            enabled: true
+            // click(menuItem, browserWindow) {
+            //     if (isElectron()) {
+            //         browserWindow.webContents.send('shortcut', 'mod+a');
+            //     } else {
+            //         UniApi.Event.emit('appbar-menu:shortcut', 'mod+a');
+            //     }
+            // }
         },
         {
             id: 'unselect',
@@ -118,15 +122,16 @@ export default {
         {
             id: 'delete',
             label: 'Delete',
+            role: 'delete',
             accelerator: 'Delete',
-            enabled: true,
-            click(menuItem, browserWindow) {
-                if (isElectron()) {
-                    browserWindow.webContents.send('shortcut', 'del');
-                } else {
-                    UniApi.Event.emit('appbar-menu:shortcut', 'del');
-                }
-            }
+            enabled: true
+            // click(menuItem, browserWindow) {
+            //     if (isElectron()) {
+            //         browserWindow.webContents.send('shortcut', 'del');
+            //     } else {
+            //         UniApi.Event.emit('appbar-menu:shortcut', 'del');
+            //     }
+            // }
         }
     ]
 };
