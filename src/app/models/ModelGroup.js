@@ -1515,6 +1515,7 @@ class ModelGroup extends EventEmitter {
                 const group = this.resetSelectedModelConvexMeshGroup();
                 ThreeUtils.setObjectParent(group, model.meshObject);
                 tableResult.forEach((rowInfo) => {
+                    this.generateRotationFaces(rowInfo.planesPosition);
                     const geometry = new BufferGeometry();
                     geometry.addAttribute('position', new Float32BufferAttribute(rowInfo.planesPosition, 3));
                     // Fix Z-fighting
@@ -1560,6 +1561,50 @@ class ModelGroup extends EventEmitter {
             return this.selectedModelConvexMeshGroup;
         }
         return null;
+    }
+
+    isReverseEdge(e1, e2) {
+        return e1[0].equals(e2[1]) && e1[1].equals(e2[0]);
+    }
+
+    checkEdgeAvailable(newEdge, edges) {
+        let foundReverseEdge = false;
+        for (let j = edges.length - 1; j > -1; j--) {
+            const edge = edges[j];
+            if (this.isReverseEdge(edge, newEdge)) {
+                foundReverseEdge = true;
+                edges.splice(j, 1);
+                break;
+            }
+        }
+        if (!foundReverseEdge) {
+            edges.push(newEdge);
+        }
+    }
+
+    generateRotationFaces(positions) {
+        // console.log(positions);
+        const vertex = [];
+        for (let i = 0; i < positions.length; i += 3) {
+            vertex.push(new Vector3(positions[i], positions[i + 1], positions[i + 2]));
+        }
+        // console.log(vertex);
+        const edges = [];
+        for (let i = 0; i < vertex.length; i += 3) {
+            const edgeA = [vertex[i], vertex[i + 1]];
+            const edgeB = [vertex[i + 1], vertex[i + 2]];
+            const edgeC = [vertex[i + 2], vertex[i]];
+            this.checkEdgeAvailable(edgeA, edges);
+            this.checkEdgeAvailable(edgeB, edges);
+            this.checkEdgeAvailable(edgeC, edges);
+        }
+        console.log(edges);
+        const facePos = [];
+        for (const e of edges) {
+            const center = e[0].add(e[1]).divideScalar(2);
+            facePos.push(center);
+            
+        }
     }
 }
 
