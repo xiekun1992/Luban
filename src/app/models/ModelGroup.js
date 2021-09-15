@@ -1,4 +1,4 @@
-import { Vector3, Group, Matrix4, BufferGeometry, MeshPhongMaterial, Mesh, DoubleSide, MeshBasicMaterial, CatmullRomCurve3 } from 'three';
+import { Vector3, Group, Matrix4, BufferGeometry, MeshPhongMaterial, Mesh, DoubleSide, MeshBasicMaterial, CatmullRomCurve3, Float32BufferAttribute } from 'three';
 import EventEmitter from 'events';
 // import { EPSILON } from '../../constants';
 import uuid from 'uuid';
@@ -1517,13 +1517,16 @@ class ModelGroup extends EventEmitter {
                 tableResult.forEach((rowInfo) => {
                     // const position = this.generateRotationFaces(rowInfo.planesPosition);
                     const geometry = new BufferGeometry();
-                    // geometry.addAttribute('position', new Float32BufferAttribute(position, 3));
-                    geometry.setFromPoints(this.generateRotationFaces(rowInfo.planesPosition));
+                    if (rowInfo.planesPosition.length > 90) {
+                        geometry.addAttribute('position', new Float32BufferAttribute(rowInfo.planesPosition, 3));
+                    } else {
+                        geometry.setFromPoints(this.generateRotationFaces(rowInfo.planesPosition));
+                    }
                     // geometry.addAttribute('position', new Float32BufferAttribute(rowInfo.planesPosition, 3));
                     // Fix Z-fighting
                     // https://sites.google.com/site/threejstuts/home/polygon_offset
                     // https://stackoverflow.com/questions/40328722/how-can-i-solve-z-fighting-using-three-js
-                    const material = new MeshBasicMaterial({ color: 0x2A2C2E, depthWrite: false, transparent: true, opacity: 0.2, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -5 });
+                    const material = new MeshBasicMaterial({ color: 0x000000, depthWrite: false, transparent: true, opacity: 0.2, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -5 });
                     const mesh = new Mesh(geometry, material);
                     mesh.userData = {
                         index: rowInfo.faceId
@@ -1635,19 +1638,33 @@ class ModelGroup extends EventEmitter {
         console.log(edges);
 
         const facePos = [];
-        for (const e of edges) {
-            let v = e[0];
-            // const result = this.calcPositionBetween(e[0], e[1]);
-            if (!facePos.find(v1 => v1.x === v.x && v1.y === v.y && v1.z === v.z)) {
-                facePos.push(new Vector3(v.x, v.y, v.z));
-            }
-            v = e[1];
-            if (!facePos.find(v1 => v1.x === v.x && v1.y === v.y && v1.z === v.z)) {
-                facePos.push(new Vector3(v.x, v.y, v.z));
-            }
+        function genFacePos(p1, p2, p3) {
+            const n = 2;
+            const x = (p1.x + 6 * p2.x + p3.x) / (4 * n);
+            const y = (p1.y + 6 * p2.y + p3.y) / (4 * n);
+            const z = (p1.z + 6 * p2.z + p3.z) / (4 * n);
+            facePos.push(new Vector3(x, y, z));
         }
+        for (let i = 0; i < edges.length - 1; i++) {
+            const p1 = edges[i][0];
+            const p2 = edges[i][1];
+            const p3 = edges[i + 1][1];
+            genFacePos(p1, p2, p3);
+        }
+        genFacePos(edges[edges.length - 1][0], edges[edges.length - 1][1], edges[0][1]);
+        // for (const e of edges) {
+        //     let v = e[0];
+        //     // const result = this.calcPositionBetween(e[0], e[1]);
+        //     if (!facePos.find(v1 => v1.x === v.x && v1.y === v.y && v1.z === v.z)) {
+        //         facePos.push(new Vector3(v.x, v.y, v.z));
+        //     }
+        //     v = e[1];
+        //     if (!facePos.find(v1 => v1.x === v.x && v1.y === v.y && v1.z === v.z)) {
+        //         facePos.push(new Vector3(v.x, v.y, v.z));
+        //     }
+        // }
         console.log(facePos);
-        const curve1 = new CatmullRomCurve3(facePos, true);
+        const curve1 = new CatmullRomCurve3(facePos, true, 'catmullrom');
         const ps = curve1.getPoints(50);
         const p1 = [ps[0], ps[1], ps[2]];
         for (let i = 3; i < ps.length; i++) {
