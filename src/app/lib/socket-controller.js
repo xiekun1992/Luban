@@ -23,7 +23,7 @@ class SocketController {
 
         this.socket && this.socket.destroy();
 
-        this.socket = io.connect('', {
+        this.socket = io.connect('http://localhost:8000', {
             query: `token=${token}`
         });
 

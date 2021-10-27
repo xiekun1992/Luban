@@ -51,7 +51,8 @@
     "eslint:debug": "echo \"Checking code style...\"; DEBUG=eslint:cli-engine eslint --ext .js --ext .jsx *.js src gulp test",
     "stylint": "stylint src/app",
     "test": "tape -r @babel/register test/*.js --no-timeout --node-arg=--require --node-arg=babel-register --node-arg=--require --node-arg=babel-polyfill",
-    "coveralls": "tape -r @@babel/register test/*.js --coverage --coverage-report=text-lcov --nyc-arg=--require --nyc-arg=babel-register --nyc-arg=--require --nyc-arg=babel-polyfill | coveralls"
+    "coveralls": "tape -r @@babel/register test/*.js --coverage --coverage-report=text-lcov --nyc-arg=--require --nyc-arg=babel-register --nyc-arg=--require --nyc-arg=babel-polyfill | coveralls",
+    "serve": "webpack serve --config webpack.config.app.development.js --progress"
   },
   "build": {
     "appId": "com.snapmaker.luban",
@@ -355,6 +356,7 @@
     "transform-loader": "~0.2.4",
     "url-loader": "~1.0.1",
     "webpack": "~4.41.6",
+    "webpack-cli": "^4.9.1",
     "webpack-dev-middleware": "~3.7.2",
     "webpack-dev-server": "~3.10.3",
     "webpack-hot-middleware": "~2.25.0",

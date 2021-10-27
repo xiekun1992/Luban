@@ -35,18 +35,18 @@ module.exports = {
         extensions: ['.js', '.json', '.jsx', '.styl']
     },
     entry: {
-        polyfill: [
+        // polyfill: [
             // https://github.com/Yaffle/EventSource
-            'eventsource-polyfill',
+            // 'eventsource-polyfill',
             // https://github.com/glenjamin/webpack-hot-middleware
-            'webpack-hot-middleware/client?reload=true',
-            path.resolve(__dirname, 'src/app/polyfill/index.js')
-        ],
+            // 'webpack-hot-middleware/client?reload=true',
+            // path.resolve(__dirname, 'src/app/polyfill/index.js')
+        // ],
         app: [
             // https://github.com/Yaffle/EventSource
-            'eventsource-polyfill',
+            // 'eventsource-polyfill',
             // https://github.com/glenjamin/webpack-hot-middleware
-            'webpack-hot-middleware/client?reload=true',
+            // 'webpack-hot-middleware/client?reload=true',
             path.resolve(__dirname, 'src/app/index.jsx')
         ]
     },
@@ -57,8 +57,17 @@ module.exports = {
         publicPath: '',
         globalObject: 'this'
     },
+    devServer: {
+        host: '0.0.0.0',
+        port: 8080,
+        contentBase: path.resolve(__dirname, 'output/app'),
+        proxy: {
+            '/api/**': 'http://localhost:8000',
+            '/data/**': 'http://localhost:8000'
+        }
+    },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(),
+        // new webpack.HotModuleReplacementPlugin(),
         new webpack.LoaderOptionsPlugin({
             debug: true
         }),
@@ -85,8 +94,8 @@ module.exports = {
             chunkFilename: '[id].css'
         }),
         new HtmlWebpackPlugin({
-            filename: 'index.hbs',
-            template: path.resolve(__dirname, 'src/app/resources/assets/index.hbs'),
+            filename: 'index.html',
+            template: path.resolve(__dirname, 'src/app/index.html'),
             chunksSortMode: 'dependency' // Sort chunks by dependency
         })
     ],

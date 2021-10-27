@@ -68,9 +68,9 @@ const createApplication = () => {
 
     // Settings
     if (process.env.NODE_ENV === 'development') {
-        const webpackDevServer = require('./webpack-dev-server').default;
+        // const webpackDevServer = require('./webpack-dev-server').default;
 
-        webpackDevServer(app);
+        // webpackDevServer(app);
 
         // Error handler - https://github.com/expressjs/errorhandler
         // Development error handler, providing stack traces and error message responses
