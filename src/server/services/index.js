@@ -70,10 +70,10 @@ function registerApis(app) {
     // Register API routes with authorized access
     // Version
     // deprecated?
-    app.get(urljoin(settings.route, 'api/version/latest'), api.version.getLatestVersion);
+    // app.get(urljoin(settings.route, 'api/version/latest'), api.version.getLatestVersion);
 
     // Utils
-    app.get(urljoin(settings.route, 'api/utils/platform'), api.utils.getPlatform); // deprecated?
+    // app.get(urljoin(settings.route, 'api/utils/platform'), api.utils.getPlatform); // deprecated?
     app.get(urljoin(settings.route, 'api/utils/fonts'), api.utils.getFonts);
     app.post(urljoin(settings.route, 'api/utils/font'), api.utils.uploadFont);
 
@@ -84,12 +84,12 @@ function registerApis(app) {
     app.delete(urljoin(settings.route, 'api/state'), api.state.unset);
 
     // G-code
-    app.get(urljoin(settings.route, 'api/gcode'), api.gcode.get); // deprecated?
+    // app.get(urljoin(settings.route, 'api/gcode'), api.gcode.get); // deprecated?
     app.post(urljoin(settings.route, 'api/gcode'), api.gcode.set);
-    app.get(urljoin(settings.route, 'api/gcode/download'), api.gcode.download); // deprecated?
+    // app.get(urljoin(settings.route, 'api/gcode/download'), api.gcode.download); // deprecated?
 
     // Controllers
-    app.get(urljoin(settings.route, 'api/controllers'), api.controllers.get); // deprecated?
+    // app.get(urljoin(settings.route, 'api/controllers'), api.controllers.get); // deprecated?
 
     // Image
     app.post(urljoin(settings.route, 'api/image'), api.image.set);
@@ -144,10 +144,10 @@ function registerApis(app) {
 
     // Watch
     // deprecated?
-    app.get(urljoin(settings.route, 'api/watch/files'), api.watch.getFiles);
-    app.post(urljoin(settings.route, 'api/watch/files'), api.watch.getFiles);
-    app.get(urljoin(settings.route, 'api/watch/file'), api.watch.readFile);
-    app.post(urljoin(settings.route, 'api/watch/file'), api.watch.readFile);
+    // app.get(urljoin(settings.route, 'api/watch/files'), api.watch.getFiles);
+    // app.post(urljoin(settings.route, 'api/watch/files'), api.watch.getFiles);
+    // app.get(urljoin(settings.route, 'api/watch/file'), api.watch.readFile);
+    // app.post(urljoin(settings.route, 'api/watch/file'), api.watch.readFile);
 
     // I18n
     app.get(urljoin(settings.route, 'api/resources/i18n/acceptedLng'), api.i18n.getAcceptedLanguage);
