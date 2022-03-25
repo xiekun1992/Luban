@@ -29,7 +29,7 @@ import { machineStore } from '../../store/local-storage';
 import ProgressStatesManager, { PROCESS_STAGE, STEP_STAGE } from '../../lib/manager/ProgressManager';
 
 import i18n from '../../lib/i18n';
-import definitionManager from '../manager/DefinitionManager';
+// import definitionManager from '../manager/DefinitionManager';
 import api from '../../api';
 import ModelGroup from '../../models/ModelGroup';
 import gcodeBufferGeometryToObj3d from '../../workers/GcodeToBufferGeometry/gcodeBufferGeometryToObj3d';
@@ -55,6 +55,7 @@ import DeleteSupportsOperation3D from '../operation-history/DeleteSupportsOperat
 import AddSupportsOperation3D from '../operation-history/AddSupportsOperation3D';
 import ArrangeOperation3D from '../operation-history/ArrangeOperation3D';
 import PrimeTowerModel from '../../models/PrimeTowerModel';
+import PrintingDefinitionManager from '../../models/definitions/PrintingDefinitionManager';
 
 // register methods for three-mesh-bvh
 THREE.Mesh.prototype.raycast = acceleratedRaycast;
@@ -115,8 +116,10 @@ const customCompareTransformation = (tran1, tran2) => {
 */
 
 const INITIAL_STATE = {
-    name: 'printing',
+    name: HEAD_PRINTING,
     // printing configurations
+    definitionManager: new PrintingDefinitionManager(),
+
     defaultDefinitions: [],
     materialDefinitions: [],
     qualityDefinitions: [],
@@ -316,8 +319,7 @@ export const actions = {
     // Use for switch machine size
     switchSize: () => async (dispatch, getState) => {
         // state
-        const printingState = getState().printing;
-        const { gcodeLineGroup } = printingState;
+        const { gcodeLineGroup, definitionManager } = getState().printing;
         // const { seriesWithToolhead, size } = getState().machine;
         // await definitionManager.init(CONFIG_HEADTYPE, seriesWithToolhead.seriesWithToolhead);
 
@@ -343,8 +345,7 @@ export const actions = {
         // also used in actions.saveAndClose of project/index.js
 
         // state
-        const printingState = getState().printing;
-        const { modelGroup, gcodeLineGroup } = printingState;
+        const { modelGroup, gcodeLineGroup, definitionManager } = getState().printing;
         const { toolHead } = getState().machine;
         modelGroup.setDataChangedCallback(() => {
             dispatch(actions.render());
