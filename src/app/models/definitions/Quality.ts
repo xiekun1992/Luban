@@ -108,174 +108,228 @@ export default class Quality {
 
     // speed
     initialLayerPrintingSpeed: DefinitionItem = {
-        "label": "Initial Layer Printing Speed",
-        "description": "The speed of printing for the initial layer. A lower value is advised to improve adhesion to the build plate.",
-        "unit": "mm/s",
-        "type": "float",
-        "default_value": 40,
-        "value": "speed_layer_0",
-        "minimum_value": "0.1",
-        "maximum_value": "math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)",
+        label: 'Initial Layer Printing Speed',
+        description: 'The speed of printing for the initial layer. A lower value is advised to improve adhesion to the build plate.',
+        unit: 'mm/s',
+        type: 'float',
+        default_value: 40,
+        value: 'speed_layer_0',
+        minimum_value: '0.1',
+        maximum_value: 'math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)',
     };
 
     infillSpeed: DefinitionItem = {
-        "label": "Infill Speed",
-        "description": "The speed at which infill is printed.",
-        "unit": "mm/s",
-        "type": "float",
-        "minimum_value": "0.1",
-        "maximum_value": "math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)",
-        "default_value": 60,
-        "value": "speed_print",
-        "enabled": "infill_sparse_density > 0",
+        label: 'Infill Speed',
+        description: 'The speed at which infill is printed.',
+        unit: 'mm/s',
+        type: 'float',
+        minimum_value: '0.1',
+        maximum_value: 'math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)',
+        default_value: 60,
+        value: 'speed_print',
+        enabled: 'infill_sparse_density > 0',
     };
 
     outerWallSpeed: DefinitionItem = {
-        "label": "Outer Wall Speed",
-        "description": "The speed at which the outermost walls are printed. Printing the outer wall at a lower speed improves the final skin quality. However, having a large difference between the inner wall speed and the outer wall speed will affect quality in a negative way.",
-        "unit": "mm/s",
-        "type": "float",
-        "minimum_value": "0.1",
-        "maximum_value": "math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)",
-        "default_value": 30,
-        "value": "speed_wall",
+        label: 'Outer Wall Speed',
+        description: 'The speed at which the outermost walls are printed. Printing the outer wall at a lower speed improves the final skin quality. However, having a large difference between the inner wall speed and the outer wall speed will affect quality in a negative way.',
+        unit: 'mm/s',
+        type: 'float',
+        minimum_value: '0.1',
+        maximum_value: 'math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)',
+        default_value: 30,
+        value: 'speed_wall',
     };
 
     innerWallSpeed: DefinitionItem = {
-        "label": "Inner Wall Speed",
-        "description": "The speed at which all inner walls are printed. Printing the inner wall faster than the outer wall will reduce printing time. It works well to set this in between the outer wall speed and the infill speed.",
-        "unit": "mm/s",
-        "type": "float",
-        "minimum_value": "0.1",
-        "maximum_value": "math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)",
-        "default_value": 60,
-        "value": "speed_wall * 2",
+        label: 'Inner Wall Speed',
+        description: 'The speed at which all inner walls are printed. Printing the inner wall faster than the outer wall will reduce printing time. It works well to set this in between the outer wall speed and the infill speed.',
+        unit: 'mm/s',
+        type: 'float',
+        minimum_value: '0.1',
+        maximum_value: 'math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)',
+        default_value: 60,
+        value: 'speed_wall * 2',
     };
 
     topBottomSpeed: DefinitionItem = {
-        "label": "Top/Bottom Speed",
-        "description": "The speed at which top/bottom layers are printed.",
-        "unit": "mm/s",
-        "type": "float",
-        "minimum_value": "0.1",
-        "maximum_value": "math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)",
-        "default_value": 30,
-        "value": "speed_print / 2",
-        "enabled": "top_layers > 0 or bottom_layers > 0",
+        label: 'Top/Bottom Speed',
+        description: 'The speed at which top/bottom layers are printed.',
+        unit: 'mm/s',
+        type: 'float',
+        minimum_value: '0.1',
+        maximum_value: 'math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)',
+        default_value: 30,
+        value: 'speed_print / 2',
+        enabled: 'top_layers > 0 or bottom_layers > 0',
     };
 
     travelSpeed: DefinitionItem = {
-        "label": "Travel Speed",
-        "description": "The speed at which travel moves are made.",
-        "unit": "mm/s",
-        "type": "float",
-        "default_value": 120,
-        "minimum_value": "0.1",
-        "maximum_value": "math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)",
-        "value": "speed_print if magic_spiralize else 120",
+        label: 'Travel Speed',
+        description: 'The speed at which travel moves are made.',
+        unit: 'mm/s',
+        type: 'float',
+        default_value: 120,
+        minimum_value: '0.1',
+        maximum_value: 'math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)',
+        value: 'speed_print if magic_spiralize else 120',
     };
 
     initialLayerTravelSpeed: DefinitionItem = {
-        "label": "Initial Layer Travel Speed",
-        "description": "The speed of travel moves in the initial layer. A lower value is advised to prevent pulling previously printed parts away from the build plate. The value of this setting can automatically be calculated from the ratio between the Travel Speed and the Print Speed.",
-        "unit": "mm/s",
-        "type": "float",
-        "default_value": 60,
-        "value": "speed_layer_0 * speed_travel / speed_print",
-        "minimum_value": "0.1",
-        "maximum_value": "math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)",
+        label: 'Initial Layer Travel Speed',
+        description: 'The speed of travel moves in the initial layer. A lower value is advised to prevent pulling previously printed parts away from the build plate. The value of this setting can automatically be calculated from the ratio between the Travel Speed and the Print Speed.',
+        unit: 'mm/s',
+        type: 'float',
+        default_value: 60,
+        value: 'speed_layer_0 * speed_travel / speed_print',
+        minimum_value: '0.1',
+        maximum_value: 'math.sqrt(machine_max_feedrate_x ** 2 + machine_max_feedrate_y ** 2)',
     };
 
     // surface
     spiralizeOuterContour: DefinitionItem = {
-        "label": "Spiralize Outer Contour",
-        "description": "Spiralize smooths out the Z move of the outer edge. This will create a steady Z increase over the whole print. This feature turns a solid model into a single walled print with a solid bottom. This feature should only be enabled when each layer only contains a single part.",
-        "type": "bool",
-        "default_value": false,
+        label: 'Spiralize Outer Contour',
+        description: 'Spiralize smooths out the Z move of the outer edge. This will create a steady Z increase over the whole print. This feature turns a solid model into a single walled print with a solid bottom. This feature should only be enabled when each layer only contains a single part.',
+        type: 'bool',
+        default_value: false,
     };
 
     skirtLineCount: DefinitionItem = {
-        "label": "Skirt Line Count",
-        "description": "Multiple skirt lines help to prime your extrusion better for small models. Setting this to 0 will disable the skirt.",
-        "type": "int",
-        "default_value": 1,
-        "minimum_value": "0",
-        "maximum_value_warning": "10",
-        "enabled": "resolveOrValue('adhesion_type') == 'skirt'",
+        label: 'Skirt Line Count',
+        description: 'Multiple skirt lines help to prime your extrusion better for small models. Setting this to 0 will disable the skirt.',
+        type: 'int',
+        default_value: 1,
+        minimum_value: '0',
+        enabled: "resolveOrValue('adhesion_type') == 'skirt'",
     };
 
     // support
     generateAutoSupport: DefinitionItem = {
-        "label": "Generate Support",
-        "description": "Generate structures to support parts of the model which have overhangs. Without these structures, such parts would collapse during printing.",
-        "type": "bool",
-        "default_value": false,
+        label: 'Generate Support',
+        description: 'Generate structures to support parts of the model which have overhangs. Without these structures, such parts would collapse during printing.',
+        type: 'bool',
+        default_value: false,
     };
 
     supportPlacement: DefinitionItem = {
-        "label": "Support Placement",
-        "description": "Adjusts the placement of the support structures. The placement can be set to Touching Build Plate or Everywhere. When set to Everywhere, the support structures will also be printed on the model.",
-        "type": "enum",
-        "options":
+        label: 'Support Placement',
+        description: 'Adjusts the placement of the support structures. The placement can be set to Touching Build Plate or Everywhere. When set to Everywhere, the support structures will also be printed on the model.',
+        type: 'enum',
+        options:
         {
-            "buildplate": "Touching Build Plate",
-            "everywhere": "Everywhere"
+            buildplate: 'Touching Build Plate',
+            everywhere: 'Everywhere'
         },
-        "default_value": "everywhere",
-        "resolve": "'everywhere' if 'everywhere' in extruderValues('support_type') else 'buildplate'",
-        "enabled": "support_enable",
+        default_value: 'everywhere',
+        enabled: 'support_enable',
     };
 
     supportPattern: DefinitionItem = {
-        "label": "Support Pattern",
-        "description": "The pattern of the support structures of the print. The different options available result in sturdy or easy to remove support.",
-        "type": "enum",
-        "options":
+        label: 'Support Pattern',
+        description: 'The pattern of the support structures of the print. The different options available result in sturdy or easy to remove support.',
+        type: 'enum',
+        options:
         {
-            "lines": "Lines",
-            "grid": "Grid",
-            "triangles": "Triangle",
-            "concentric": "Concentric",
-            "zigzag": "Zig Zag",
-            "cross": "Cross",
-            "gyroid": "Gyroid"
+            lines: 'Lines',
+            grid: 'Grid',
+            triangles: 'Triangle',
+            concentric: 'Concentric',
+            zigzag: 'Zig Zag',
+            cross: 'Cross',
+            gyroid: 'Gyroid'
         },
-        "default_value": "zigzag",
-        "enabled": "support_enable or support_meshes_present",
+        default_value: 'zigzag',
+        enabled: 'support_enable or support_meshes_present',
     };
 
     supportDensity: DefinitionItem = {
-        "label": "Support Density",
-        "description": "Adjusts the density of the support structure. A higher value results in better overhangs, but the supports are harder to remove.",
-        "unit": "%",
-        "type": "float",
-        "minimum_value": "0",
-        "default_value": 15,
-        "value": "15 if support_enable and support_structure == 'normal' else 0 if support_enable and support_structure == 'tree' else 15",
-        "enabled": "support_enable or support_meshes_present",
+        label: 'Support Density',
+        description: 'Adjusts the density of the support structure. A higher value results in better overhangs, but the supports are harder to remove.',
+        unit: '%',
+        type: 'float',
+        minimum_value: '0',
+        default_value: 15,
+        value: "15 if support_enable and support_structure == 'normal' else 0 if support_enable and support_structure == 'tree' else 15",
+        enabled: 'support_enable or support_meshes_present',
     };
 
     supportZDistance: DefinitionItem = {
-        "label": "Support Z Distance",
-        "description": "Distance from the top/bottom of the support structure to the print. This gap provides clearance to remove the supports after the model is printed. This value is rounded up to a multiple of the layer height.",
-        "unit": "mm",
-        "type": "float",
-        "minimum_value": "0",
-        "maximum_value_warning": "machine_nozzle_size",
-        "default_value": 0.1,
-        "limit_to_extruder": "support_interface_extruder_nr if support_interface_enable else support_infill_extruder_nr",
-        "enabled": "support_enable or support_meshes_present",
+        label: 'Support Z Distance',
+        description: 'Distance from the top/bottom of the support structure to the print. This gap provides clearance to remove the supports after the model is printed. This value is rounded up to a multiple of the layer height.',
+        unit: 'mm',
+        type: 'float',
+        minimum_value: '0',
+        default_value: 0.1,
+        enabled: 'support_enable or support_meshes_present',
     };
 
     supportOverhangAngle: DefinitionItem = {
-        "label": "Support Overhang Angle",
-        "description": "The minimum angle of overhangs for which support is added. At a value of 0° all overhangs are supported, 90° will not provide any support.",
-        "unit": "°",
-        "type": "float",
-        "minimum_value": "0",
-        "maximum_value": "90",
-        "maximum_value_warning": "80",
-        "default_value": 50,
-        "enabled": "support_enable",
+        label: 'Support Overhang Angle',
+        description: 'The minimum angle of overhangs for which support is added. At a value of 0° all overhangs are supported, 90° will not provide any support.',
+        unit: '°',
+        type: 'float',
+        minimum_value: '0',
+        maximum_value: '90',
+        default_value: 50,
+        enabled: 'support_enable',
+    };
+
+    // dual extension
+    enablePrimeTower: DefinitionItem = {
+        label: 'Enable Prime Tower',
+        description: 'Print a tower next to the print which serves to prime the material after each nozzle switch.',
+        type: 'bool',
+        enabled: 'extruders_enabled_count > 1',
+        default_value: false,
+    };
+
+    enableOozeShield: DefinitionItem = {
+        label: 'Enable Ooze Shield',
+        description: "Enable exterior ooze shield. This will create a shell around the model which is likely to wipe a second nozzle if it's at the same height as the first nozzle.",
+        type: 'bool',
+        enabled: 'extruders_enabled_count > 1',
+        default_value: false,
+    };
+
+    oozeShieldAngle: DefinitionItem = {
+        label: 'Ooze Shield Angle',
+        description: 'The maximum angle a part in the ooze shield will have. With 0 degrees being vertical, and 90 degrees being horizontal. A smaller angle leads to less failed ooze shields, but more material.',
+        type: 'float',
+        unit: '°',
+        enabled: "resolveOrValue('ooze_shield_enabled')",
+        default_value: 60,
+        minimum_value: '0',
+        maximum_value: '90',
+    };
+
+    oozeShieldDistance: DefinitionItem = {
+        label: 'Ooze Shield Distance',
+        description: 'Distance of the ooze shield from the print, in the X/Y directions.',
+        type: 'float',
+        unit: 'mm',
+        enabled: "resolveOrValue('ooze_shield_enabled')",
+        default_value: 2,
+        minimum_value: '0',
+    };
+
+    nozzleSwitchRetractionDistance: DefinitionItem = {
+        label: 'Nozzle Switch Retraction Distance',
+        description: 'The amount of retraction when switching extruders. Set to 0 for no retraction at all. This should generally be the same as the length of the heat zone.',
+        type: 'float',
+        unit: 'mm',
+        enabled: 'retraction_enable and extruders_enabled_count > 1',
+        default_value: 20,
+        value: 'machine_heat_zone_length',
+    };
+
+    nozzleSwitchRetractionSpeed: DefinitionItem = {
+        label: 'Nozzle Switch Retraction Speed',
+        description: 'The speed at which the filament is retracted. A higher retraction speed works better, but a very high retraction speed can lead to filament grinding.',
+        type: 'float',
+        unit: 'mm/s',
+        enabled: 'retraction_enable and extruders_enabled_count > 1',
+        default_value: 20,
+        minimum_value: '0.1',
+        maximum_value: "machine_max_feedrate_e if retraction_enable else float('inf')",
     };
 }
