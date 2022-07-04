@@ -33,7 +33,7 @@ function serializeObject(context, propInObject = false) {
             if (propInObject) {
                 propsDeclare += `${k}: ${context[k]}\n`;
             } else {
-                propsDeclare += `${context[k]};\n`;
+                propsDeclare += `const ${k} = ${context[k]};\n`;
             }
         } else {
             propsDeclare += `const ${k} = ${context[k]};\n`;
